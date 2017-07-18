@@ -223,6 +223,11 @@ function addClozeCard(deck){
 }
 
 function startQuiz(index){
+	if (index >= myDeck.length){
+		console.log("\n"+"DONE!"+"\n");
+		secondMenu();
+		return false;
+	}
 	let myCard = myDeck[index];
 	myCard.draw('front');
 
@@ -233,15 +238,9 @@ function startQuiz(index){
 			type: "input"
 		}
 	]).then(function(response){
-		
-		if (index >= myDeck.length){
-			console.log("\n"+"DONE!"+"\n");
-			secondMenu();	
-		} else {
-			console.log("*****  ANSWER  *****");
-			myCard.draw('back');
-			startQuiz(index+1);
-		}
+		console.log("*****  ANSWER  *****");
+		myCard.draw('back');
+		startQuiz(index+1);
 	});
 }
 
