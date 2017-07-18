@@ -8,6 +8,11 @@ var ClozeCard = function(text,cloze){
             this.fullText = text;
             this.cloze = cloze;
             this.partialText = text.replace(cloze," ... ");
+
+            this.type = "cloze";
+
+            this.front = this.partialText;
+            this.back = this.fullText;
         }else{
             //if it does not, throw an error
             console.log("Be sure that your text includes the cloze text.");
