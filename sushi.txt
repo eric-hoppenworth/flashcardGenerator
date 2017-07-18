@@ -1,1 +1,1 @@
-[{"front":"Mexican Roll","back":"Tempura Shrimp, avocado, cream cheese, eel sauce","type":"basic"}]
+[{"front":"Mexican Roll","back":"Tempura Shrimp, avocado, cream cheese, eel sauce","type":"basic"},{"front":"Special Mexican Roll","back":"Mexican Roll, steamed shrimp, eel sauce","type":"basic"}]

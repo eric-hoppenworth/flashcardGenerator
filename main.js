@@ -6,10 +6,6 @@ const fs = require('fs');
 var myDeck = [];
 var fileName = "";
 
-var lineWidth = 53;
-var lineLeft = "/      ";
-var lineRight = "      /";
-var trueLineWidth = lineWidth + lineLeft.length + lineRight.length;
 
 //On load, show a menu:
 firstMenu();
@@ -71,11 +67,13 @@ function secondMenu(){
 		}else if(response.menuOption === "Start Quiz"){
 			//quiz
 				//loop thru the cards and ask for input on each card.
-				//track score
-			console.log("\n");
-			console.log(myDeck);
-			console.log("\n");
-			secondMenu();
+			if(myDeck.length === 0){
+				//do not start the quiz
+				console.log("This deck has no cards in it");
+				secondMenu();
+			} else{
+				startQuiz(0);
+			}
 		}else if(response.menuOption === "Go Back"){
 			//back
 				//return to the previous menu
@@ -224,41 +222,26 @@ function addClozeCard(deck){
 	});
 }
 
-///////////////////////////////////
-/////////    FORMATTING   /////////
-///////////////////////////////////
-function buildLine(content = " ",justify = "left"){
-	var i = lineWidth;
-	var j = 0;
-	//if content came in as empyt string, give it a spacebar value
-	content = content === "" ? " " : content;
-	while(true){
-		//check to see if the content is not longer than the current line
-		if(content.length <= i){
-			var txt = "";
-			if(justify === "left"){
-				//if it is longer, add remaining spaces to the right side
-				txt = lineLeft + content.substring(j) + " ".repeat(i - content.length)+lineRight;
-			} else if (justify === "center"){
-				//add half of the spaces to the left, and half to the right.  Also, add one extra to the right(if difference is odd)
-				txt = lineLeft + " ".repeat((i - content.length)/2) + content.substring(j) + " ".repeat((i - content.length)/2)+" ".repeat((i-content.length)%2)+lineRight;
-			} else if (justify === "full"){
-				//repeat the provided text without the endings.
-				txt = content.repeat(trueLineWidth/content.length);
-			}
-			console.log(txt);
-			break;
-		} else{
-			//if the content is too long, get a substring
-			if(justify === "left" || justify === "center"){
-				txt = lineLeft + content.substring(j,i) + lineRight;
-			} else if (justify === "full"){
-				//do nothing, too big
-				txt = "";
-			}
-			console.log(txt);
+function startQuiz(index){
+	let myCard = myDeck[index];
+	myCard.draw('front');
+
+	inquirer.prompt([
+		{
+			name: "ready",
+			message:"Press Enter to continue",
+			type: "input"
 		}
-		j = i;
-		i = i + lineWidth;
-	}
-}	
+	]).then(function(response){
+		
+		if (index >= myDeck.length){
+			console.log("\n"+"DONE!"+"\n");
+			secondMenu();	
+		} else {
+			console.log("*****  ANSWER  *****");
+			myCard.draw('back');
+			startQuiz(index+1);
+		}
+	});
+}
+
